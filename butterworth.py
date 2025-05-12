@@ -15,15 +15,15 @@ def blpf(shape, cutoff, order):
 def apply_blpf(img, cutoff=30 , order=2):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY).astype(np.float32)
     #fft
-    freq_domain = np.fft.fft2(img)
-    freq_domain_shifted = np.fft.fftshift(freq_domain)
+    dft = np.fft.fft2(img)
+    dft_shifted = np.fft.fftshift(dft)
     
     #filter
     blpf_filter = blpf(img.shape,cutoff,order)
-    filtered_freq_domain = freq_domain_shifted * blpf_filter
+    filtered_dft = dft_shifted * blpf_filter
     
     #ifft
-    inv_shifted = np.fft.ifftshift(filtered_freq_domain)
+    inv_shifted = np.fft.ifftshift(filtered_dft)
     reconstructed_img = np.abs(np.fft.ifft2(inv_shifted))
     return reconstructed_img, blpf_filter
 
